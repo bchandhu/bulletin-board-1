@@ -15,7 +15,7 @@
 <form action="/insert_post" method="post">
   <div>
     <label for="title_field">Title</label>
-    <input type="title_field" type="text" name="title">
+    <input id="title_field" type="text" name="title">
   </div>
 
   <div>
@@ -56,4 +56,26 @@
     </tr>
   <% end %>
 
+</table>
+
+<h2>Expired posts</h2>
+
+<% expired_posts = Post.where(board_id: @the_board.id).where("expires_on < ?", Date.today).order(expires_on: :desc) %>
+
+<table border="1">
+  <tr>
+    <th>Title</th>
+    <th>Body</th>
+    <th>Posted on</th>
+    <th>Expired on</th>
+  </tr>
+
+  <% expired_posts.each do |post| %>
+    <tr>
+      <td><%= post.title %></td>
+      <td><%= post.body %></td>
+      <td><%= post.created_at.strftime("%b %e, %Y") %></td>
+      <td><%= post.expires_on.strftime("%b %e, %Y") %></td>
+    </tr>
+  <% end %>
 </table>
